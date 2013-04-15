@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <title qualifier="officialtitle">#Title</title>
+  <creator qualifier="aut">
+    <type>per</type>
+    <name>#Author</name>
+  </creator>
+  #CommitteeMembers
+  <publisher>
+    <info>www.unt.edu</info>
+    <location>Denton, Texas</location>
+    <name>University of North Texas</name>
+  </publisher>
+  <date qualifier="creation">2012-08</date>
+  <language>eng</language>
+  <description qualifier="content">#Abstract</description>
+  #Keywordmeta
+  <primarySource></primarySource>
+  <coverage qualifier=""></coverage>
+  <source qualifier=""></source>
+  <citation qualifier=""></citation>
+  <relation qualifier=""></relation>
+  <collection>UNTETD</collection>
+  <institution>UNT</institution>
+  <rights qualifier="access">public</rights>
+  <rights qualifier="holder">#Author</rights>
+  <rights qualifier="license">copyright</rights>
+  <rights qualifier="statement">Copyright is held by the author, unless otherwise noted. All rights Reserved.</rights>
+  <resourceType>text_etd</resourceType>
+  <format>text</format>
+  <identifier qualifier=""></identifier>
+  <degree qualifier="department">#Department</degree>
+  <degree qualifier="discipline">#Discipline</degree>
+  <degree qualifier="level">#Level</degree>
+  <degree qualifier="name">#Degreename</degree>
+  <degree qualifier="publicationType">#Pubtype</degree>
+  <degree qualifier="grantor">University of North Texas</degree>
+  <note qualifier="nonDisplay">Metadata created on 2013-02-22</note>
+  <meta qualifier="hidden">False</meta>
+  <meta qualifier="metadataCreator">rjwilson</meta>
+</metadata>
