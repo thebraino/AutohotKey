@@ -1,0 +1,901 @@
+#Persistent
+DefinedAddress = 
+DefinedAuthor = 
+DefinedType = 
+DefinedPub = 0
+DefinedTitle = 
+DefinedDegreeName = 
+DefinedDegreeDiscipline = 
+DefinedKeywords = 
+DefinedAbstract = 
+DefinedCommittee =
+CommitteeMembers = 
+KeywordMeta = 
+Clipboard =
+Pause::Pause
+
+; ======= Destroys old GUI windows to clear variables for next templateDefines blanks for future variables
+
+SetKeyDelay, 0
+
+Return
+
+#Home::
+Beginning:
+DefinedAddress = 
+DefinedAuthor = 
+DefinedType = 
+DefinedPub = 0
+DefinedTitle = 
+DefinedDegreeName = 
+DefinedDegreeDiscipline = 
+DefinedKeywords = 
+DefinedAbstract = 
+DefinedCommittee =
+CommitteeMembers = 
+KeywordMeta = 
+Clipboard =
+SendInput, {F4}{ControlDown}a{ControlUp}
+sleep, 200
+Send ^c
+ClipWait
+Sleep, 100
+DefinedAddress = %clipboard%
+SetWorkingDir, %DefinedAddress%
+Run, Wordpad.exe index.docx
+WinWaitActive, index
+
+; ======= No 'return' present incase of error, can restart at the below without restarting script
+
+#1::
+; ======= Searches the opened index for metadata and saves it to variables
+Author:
+Sleep, 3000
+clipboard = 
+SendInput, {ControlDown}f{Controlup}
+WinWaitActive, Find
+Sleep, 100
+SendInput, Author’s Name
+Sleep, 100
+SendInput, {Enter}{Esc}
+Sleep, 100
+SendInput, {TAB}
+Send ^c
+ClipWait
+DefinedAuthor = %clipboard%
+
+Type:
+Sleep, 200
+clipboard = 
+SendInput, {ControlDown}f{Controlup}
+WinWaitActive, Find
+Sleep, 100
+SendInput, Document Type
+Sleep, 100
+SendInput, {Enter}{Esc}
+Sleep, 100
+SendInput, {TAB}
+Send ^c
+ClipWait
+DefinedType = %clipboard%
+if DefinedType = Thesis
+  DefinedType = Master's
+else if DefinedType = Dissertation
+	DefinedType = Doctoral
+
+Title:
+Sleep, 200
+clipboard = 
+SendInput, {ControlDown}f{Controlup}
+WinWaitActive, Find
+Sleep, 100
+SendInput, Title
+Sleep, 100
+SendInput, {Enter}{Esc}
+Sleep, 100
+SendInput, {TAB}
+Send ^c
+ClipWait
+DefinedTitle = %clipboard%
+; ========================
+StringUpper, DefinedTitle, DefinedTitle, T
+StringReplace, DefinedTitle, DefinedTitle, ., , all
+
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%with%A_SPACE%, %A_SPACE%with%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%a%A_SPACE%, %A_SPACE%a%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%an%A_SPACE%, %A_SPACE%an%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%and%A_SPACE%, %A_SPACE%and%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%of%A_SPACE%, %A_SPACE%of%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%at%A_SPACE%, %A_SPACE%at%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%in%A_SPACE%, %A_SPACE%in%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%the%A_SPACE%, %A_SPACE%the%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%on%A_SPACE%, %A_SPACE%on%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%for%A_SPACE%, %A_SPACE%for%A_SPACE%, all
+StringReplace, DefinedTitle, DefinedTitle, %A_SPACE%to%A_SPACE%, %A_SPACE%to%A_SPACE%, all
+; ========================
+
+DegreeName:
+Sleep, 200
+clipboard = 
+SendInput, {ControlDown}f{Controlup}
+WinWaitActive, Find
+Sleep, 100
+SendInput, Degree
+Sleep, 100
+SendInput, {Enter}{Esc}
+Sleep, 100
+SendInput, {TAB}
+Send ^c
+ClipWait
+DefinedDegreeName = %clipboard%
+
+DegreeDiscipline:
+Sleep, 200
+clipboard = 
+SendInput, {ControlDown}f{Controlup}
+WinWaitActive, Find
+Sleep, 100
+SendInput, Major
+Sleep, 100
+SendInput, {Enter}{Esc}
+Sleep, 100
+SendInput, {TAB}
+Send ^c
+ClipWait
+DefinedDegreeDiscipline = %clipboard%
+
+; =====================Committee======================
+Committee:
+Sleep, 100
+clipboard = 
+SendInput, {ControlDown}f{Controlup}
+WinWaitActive, Find
+Sleep, 100
+SendInput, Committee
+Sleep, 100
+SendInput, {Enter}{Esc}
+Sleep, 100
+SendInput, {TAB}
+Send ^c
+ClipWait
+DefinedCommittee = %clipboard%
+
+; ======= Removes line breaks and replaces with tabs for future data entry
+StringReplace, DefinedCommittee, DefinedCommittee, `r`n, %a_tab%, all
+CommitteeWindow:
+    Gui, 10:+AlwaysOnTop
+    Gui, 10:Add, Text,   x6   y6  w100, Name1:
+    Gui, 10:Add, Edit,   x6   y+5 w100 vCommitteeM1W
+
+    Gui, 10:Add, Text,   x6   y+6  w100, Name2:
+    Gui, 10:Add, Edit,   x6   y+5 w100 vCommitteeM2W
+
+    Gui, 10:Add, Text,   x6   y+6  w100, Name3:
+    Gui, 10:Add, Edit,   x6   y+5 w100 vCommitteeM3W
+
+    Gui, 10:Add, Text,   x6   y+6  w100, Name4:
+    Gui, 10:Add, Edit,   x6   y+5 w100 vCommitteeM4W
+
+    Gui, 10:Add, Text,   x6   y+6  w100, Name5:
+    Gui, 10:Add, Edit,   x6   y+5 w100 vCommitteeM5W
+
+    Gui, 10:Add, Text,   x6   y+6  w100, Name6:
+    Gui, 10:Add, Edit,   x6   y+5 w100 vCommitteeM6W
+
+    Gui, 10:Add, Button, x6 default, OK
+    Gui, 10:Show,, Committee
+
+Sleep, 100
+WinActivate, Committee
+SendInput, %DefinedCommittee%
+Sleep, 100
+; ======= Makes a window and enters the previously copied Committee list into individual variables
+
+10GuiClose:
+10ButtonOK:
+Gui, 10:Submit
+
+
+Loop, 6
+   StringReplace, CommitteeM%A_Index%W, CommitteeM%A_Index%W, `,%A_Space%, %a_tab%, all
+
+; ======= Divides Committee entries into name and title variables
+CommitteeM1Title:
+If (CommitteeM1W <> "") {
+    Gui, 11:+AlwaysOnTop
+    Gui, 11:Add, Text,   x6   y6  w100, Name1:
+    Gui, 11:Add, Text,   x+10 yp  w100, Title1:
+    Gui, 11:Add, Edit,   x6   y+5 w100 vCommitteeM1N
+    Gui, 11:Add, Edit,   x+10 yp  w100 vCommitteeM1T
+    Gui, 11:Add, Button, x6 default, OK
+    Gui, 11:Show,, CommitteeNaming1
+SendInput, %CommitteeM1W%
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+11GuiClose:
+11ButtonOK:
+Gui, 11:Submit
+
+}
+
+CommitteeM2Title:
+If (CommitteeM2W <> "") {
+    Gui, 12:+AlwaysOnTop
+    Gui, 12:Add, Text,   x6   y6  w100, Name2:
+    Gui, 12:Add, Text,   x+10 yp  w100, Title2:
+    Gui, 12:Add, Edit,   x6   y+5 w100 vCommitteeM2N
+    Gui, 12:Add, Edit,   x+10 yp  w100 vCommitteeM2T
+    Gui, 12:Add, Button, x6 default, OK
+    Gui, 12:Show,, CommitteeNaming2
+SendInput, %CommitteeM2W%
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+12GuiClose:
+12ButtonOK:
+Gui, 12:Submit
+
+}
+
+CommitteeM3Title:
+If (CommitteeM3W <> "") {
+    Gui, 13:+AlwaysOnTop
+    Gui, 13:Add, Text,   x6   y6  w100, Name3:
+    Gui, 13:Add, Text,   x+10 yp  w100, Title3:
+    Gui, 13:Add, Edit,   x6   y+5 w100 vCommitteeM3N
+    Gui, 13:Add, Edit,   x+10 yp  w100 vCommitteeM3T
+    Gui, 13:Add, Button, x6 default, OK
+    Gui, 13:Show,, CommitteeNaming3
+SendInput, %CommitteeM3W%
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+13GuiClose:
+13ButtonOK:
+Gui, 13:Submit
+
+}
+
+CommitteeM4Title:
+If (CommitteeM4W <> "") {
+    Gui, 14:+AlwaysOnTop
+    Gui, 14:Add, Text,   x6   y6  w100, Name4:
+    Gui, 14:Add, Text,   x+10 yp  w100, Title4:
+    Gui, 14:Add, Edit,   x6   y+5 w100 vCommitteeM4N
+    Gui, 14:Add, Edit,   x+10 yp  w100 vCommitteeM4T
+    Gui, 14:Add, Button, x6 default, OK
+    Gui, 14:Show,, CommitteeNaming4
+SendInput, %CommitteeM4W%
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+14GuiClose:
+14ButtonOK:
+Gui, 14:Submit
+
+}
+
+CommitteeM5Title:
+If (CommitteeM5W <> "") {
+    Gui, 15:+AlwaysOnTop
+    Gui, 15:Add, Text,   x6   y6  w100, Name5:
+    Gui, 15:Add, Text,   x+10 yp  w100, Title5:
+    Gui, 15:Add, Edit,   x6   y+5 w100 vCommitteeM5N
+    Gui, 15:Add, Edit,   x+10 yp  w100 vCommitteeM5T
+    Gui, 15:Add, Button, x6 default, OK
+    Gui, 15:Show,, CommitteeNaming5
+SendInput, %CommitteeM5W%
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+15GuiClose:
+15ButtonOK:
+Gui, 15:Submit
+
+}
+
+CommitteeM6Title:
+If (CommitteeM6W <> "") {
+    Gui, 16:+AlwaysOnTop
+    Gui, 16:Add, Text,   x6   y6  w100, Name6:
+    Gui, 16:Add, Text,   x+10 yp  w100, Title6:
+    Gui, 16:Add, Edit,   x6   y+5 w100 vCommitteeM6N
+    Gui, 16:Add, Edit,   x+10 yp  w100 vCommitteeM6T
+    Gui, 16:Add, Button, x6 default, OK
+    Gui, 16:Show,, CommitteeNaming6
+SendInput, %CommitteeM6W%
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+16GuiClose:
+16ButtonOK:
+Gui, 16:Submit
+
+}
+
+; ======= Moves last name to the beginning for metadata purposes
+
+CommitteeM1Naming:
+If (CommitteeM1N <> "")
+{
+    Gui, 21:+AlwaysOnTop
+    Gui, 21:Add, Text,   x6   y6  w100, ReName1:
+    Gui, 21:Add, Edit,   x6   y+5 w100 vCommitteeM1Name
+    Gui, 21:Add, Button, x6 default, OK
+    Gui, 21:Show,, CommitteeReNaming1
+SendInput, %CommitteeM1N%{ShiftDown}{ControlDown}{Left}{ControlUp}{ShiftUp}
+SendInput, ^x{Backspace}{Home}^v`,{space}
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+21GuiClose:
+21ButtonOK:
+Gui, 21:Submit
+
+}
+
+CommitteeM2Naming:
+If (CommitteeM2N <> "")
+{
+    Gui, 22:+AlwaysOnTop
+    Gui, 22:Add, Text,   x6   y6  w100, ReName2:
+    Gui, 22:Add, Edit,   x6   y+5 w100 vCommitteeM2Name
+    Gui, 22:Add, Button, x6 default, OK
+    Gui, 22:Show,, CommitteeReNaming2
+SendInput, %CommitteeM2N%{ShiftDown}{ControlDown}{Left}{ControlUp}{ShiftUp}
+SendInput, ^x{Backspace}{Home}^v`,{space}
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+22GuiClose:
+22ButtonOK:
+Gui, 22:Submit
+
+}
+
+CommitteeM3Naming:
+If (CommitteeM3N <> "")
+{
+    Gui, 23:+AlwaysOnTop
+    Gui, 23:Add, Text,   x6   y6  w100, ReName3:
+    Gui, 23:Add, Edit,   x6   y+5 w100 vCommitteeM3Name
+    Gui, 23:Add, Button, x6 default, OK
+    Gui, 23:Show,, CommitteeReNaming3
+SendInput, %CommitteeM3N%{ShiftDown}{ControlDown}{Left}{ControlUp}{ShiftUp}
+SendInput, ^x{Backspace}{Home}^v`,{space}
+Sleep, 100
+; SendInput, {Enter}
+Sleep, 100
+23GuiClose:
+23ButtonOK:
+Gui, 23:Submit
+Sleep, 100
+
+}
+
+CommitteeM4Naming:
+If (CommitteeM4N <> "")
+{
+    Gui, 24:+AlwaysOnTop
+    Gui, 24:Add, Text,   x6   y6  w100, ReName4:
+    Gui, 24:Add, Edit,   x6   y+5 w100 vCommitteeM4Name
+    Gui, 24:Add, Button, x6 default, OK
+    Gui, 24:Show,, CommitteeReNaming3
+SendInput, %CommitteeM4N%{ShiftDown}{ControlDown}{Left}{ControlUp}{ShiftUp}
+SendInput, ^x{Backspace}{Home}^v`,{space}
+Sleep, 100
+; SendInput, {Enter}
+24GuiClose:
+24ButtonOK:
+Gui, 24:Submit
+Sleep, 100
+}
+
+CommitteeM5Naming:
+If (CommitteeM5N <> "")
+{
+    Gui, 25:+AlwaysOnTop
+    Gui, 25:Add, Text,   x6   y6  w100, NReName5:
+    Gui, 25:Add, Edit,   x6   y+5 w100 vCommitteeM5Name
+    Gui, 25:Add, Button, x6 default, OK
+    Gui, 25:Show,, CommitteeReNaming5
+SendInput, %CommitteeM5N%{ShiftDown}{ControlDown}{Left}{ControlUp}{ShiftUp}
+SendInput, ^x{Backspace}{Home}^v`,{space}
+Sleep, 100
+; SendInput, {Enter}
+25GuiClose:
+25ButtonOK:
+Gui, 25:Submit
+Sleep, 100
+
+}
+
+CommitteeM6Naming:
+If (CommitteeM6N <> "")
+{
+    Gui, 26:+AlwaysOnTop
+    Gui, 26:Add, Text,   x6   y6  w100, ReName6:
+    Gui, 26:Add, Edit,   x6   y+5 w100 vCommitteeM6Name
+    Gui, 26:Add, Button, x6 default, OK
+    Gui, 26:Show,, CommitteeReNaming6
+SendInput, %CommitteeM6N%{ShiftDown}{ControlDown}{Left}{ControlUp}{ShiftUp}
+SendInput, ^x{Backspace}{Home}^v`,{space}
+Sleep, 100
+; SendInput, {Enter}
+26GuiClose:
+26ButtonOK:
+Gui, 26:Submit
+Sleep, 100
+
+}
+
+; ======================/Committee=============================
+; ======================Keywords===============================
+Kewords:
+Sleep, 100
+clipboard = 
+SendInput, {ControlDown}f{Controlup}
+WinWaitActive, Find
+Sleep, 100
+SendInput, Keywords
+Sleep, 100
+SendInput, {Enter}{Esc}
+Sleep, 100
+SendInput, {TAB}
+Send ^c
+ClipWait
+DefinedKeywords = %clipboard%
+
+StringReplace, DefinedKeywords, DefinedKeywords, `,%A_Space%, %a_tab%, all
+; ======= Makes window for keywords and seperates into individual variables
+KeywordWindow:
+    Gui, 30:+AlwaysOnTop
+    Gui, 30:Add, Text,   x6   y6  w100, Keyword1:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword1
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword2:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword2
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword3:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword3
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword4:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword4
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword5:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword5
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword6:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword6
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword7:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword7
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword8:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword8
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword9:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword9
+
+    Gui, 30:Add, Text,   x6   y+6  w100, Keyword10:
+    Gui, 30:Add, Edit,   x6   y+5 w100 vKeyword10
+
+    Gui, 30:Add, Button, x6 default, OK
+    Gui, 30:Show,, Keywords
+
+Sleep, 100
+WinActivate, Keywords
+SendInput, %DefinedKeywords%
+Sleep, 100
+
+30GuiClose:
+30ButtonOK:
+Gui, 30:Submit
+
+; ==============/Keywords=================
+; ==============Abstract==================
+Abstract:
+WinActivate, index
+Sleep, 200
+clipboard = 
+Send ^{end}
+Sleep, 100
+SendInput, {UP}
+Sleep, 100
+SendInput, {UP}
+Sleep, 100
+SendInput, {End}
+Sleep, 100
+SendInput, {ControlDown}{ShiftDown}{Up}{ShiftUp}{ControlUp}
+Sleep, 100
+Send ^c
+ClipWait
+DefinedAbstract = %clipboard%
+SendInput !{F4}
+; ==========Department=====================
+SetTitleMatchMode, 2
+Run, %DefinedAddress%\01_jpg\000100tp.jpg
+
+DepartmentWindow:
+    Gui, 40:+AlwaysOnTop
+    Gui, 40:Add, Text,   x6   y6  w400, Department:
+    Gui, 40:Add, Edit,   x6   y+5 w400 vDefinedDepartment, Department of 
+    Gui, 40:Add, Button, x6 default, OK
+    Gui, 40:Show,, Department
+Sleep, 1000
+WinActivate, Department
+SendInput, {End}
+Return
+
+40GuiClose:
+40ButtonOK:
+Gui, 40:Submit
+
+WinActivate, 000100tp
+SendInput !{F4}
+; ==================SendingText=========================
+; ======================================================
+; StringReplace, DefinedTitle, DefinedTitle, `,%A_Space%, %a_tab%, all
+
+IfExist, C:\Program Files\jEdit\jedit.exe
+	Run, C:\Program Files\jEdit\jedit.exe metadata.xml
+Else
+	Run, C:\Program Files\jEdit\jedit.bat metadata.xml
+; ======= Opens jEdit based on if the EXE or BAT exists
+
+WinWait, jEdit
+Sleep, 1000
+
+^1::
+
+SendInput, ^{Home}
+Sleep, 200
+SendInput, ^{Home}
+Sleep, 200
+; ====Author=====
+Loop 3 {
+StringReplace, DefinedAuthor, DefinedAuthor, %A_Space%`,%A_Space%, `,%A_Space%, all
+}
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedAuthor%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}A{SHIFTUP}uthor{TAB}
+Sleep, 200
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 200
+
+; ====Type======
+sleep, 500
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedType%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}L{SHIFTUP}evel{TAB}
+Sleep, 200
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 200
+
+if DefinedType = Master's
+	DefinedPub = Thesi
+else if DefinedType = Doctoral
+	DefinedPub = Disse
+
+; ====PubType==========
+sleep, 500
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedPub%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}P{SHIFTUP}ubtype{TAB}
+Sleep, 200
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 500
+
+; ====Title=====
+StringReplace, DefinedTitle, DefinedTitle, ", &quot;, all
+StringReplace, DefinedTitle, DefinedTitle, &, &amp;, all
+StringReplace, DefinedTitle, DefinedTitle, ', &apos;, all
+StringReplace, DefinedTitle, DefinedTitle, <, &lt;, all
+StringReplace, DefinedTitle, DefinedTitle, >, &gt;, all
+sleep, 500
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedTitle%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}T{SHIFTUP}itle{TAB}
+Sleep, 200
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 500
+
+; ====Department=====
+sleep, 500
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedDepartment%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}D{SHIFTUP}epartment{TAB}
+Sleep, 200
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 500
+
+; ====DegreeName=====
+sleep, 500
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedDegreename%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}D{SHIFTUP}egreename{TAB}
+Sleep, 200
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 500
+
+; ====DegreeDiscipline=========
+sleep, 500
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedDegreeDiscipline%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}D{SHIFTUP}iscipline{TAB}
+Sleep, 200
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 500
+
+; ===CommitteeMembers================================
+; ===== No 'return' present incase of error, can restart at the below without restarting script
+^2::
+Loop 3 {
+StringReplace, CommitteeM1Name, CommitteeM1Name, %A_Space%`,%A_Space%, `,%A_Space%, all
+StringReplace, CommitteeM2Name, CommitteeM2Name, %A_Space%`,%A_Space%, `,%A_Space%, all
+StringReplace, CommitteeM3Name, CommitteeM3Name, %A_Space%`,%A_Space%, `,%A_Space%, all
+StringReplace, CommitteeM4Name, CommitteeM4Name, %A_Space%`,%A_Space%, `,%A_Space%, all
+StringReplace, CommitteeM5Name, CommitteeM5Name, %A_Space%`,%A_Space%, `,%A_Space%, all
+StringReplace, CommitteeM6Name, CommitteeM6Name, %A_Space%`,%A_Space%, `,%A_Space%, all
+}
+
+SendCommitteeMembers:
+sleep, 500
+SendInput, ^{Home}
+Sleep, 200
+SendInput, ^{Home}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}C{SHIFTUP}ommitteeMembers
+Sleep, 200
+Send, {Enter}
+Sleep, 200
+SendInput, {Esc}
+sleep, 500
+
+; ======= Enters metadata format for Committee members including variables
+If (CommitteeM1Name <> "")
+SendInput, <contributor qualifier="cha">`r{Space}{Space}
+If ( CommitteeM1T <> "")
+SendInput, <info>%CommitteeM1T%</`r
+If (CommitteeM1Name <> "")
+SendInput, <type>per</`r<name>%CommitteeM1Name%</`r{Backspace}{Backspace}</
+Sleep, 100
+; ==2
+If (CommitteeM2Name <> "")
+SendInput, `r<contributor qualifier="cmr">`r{Space}{Space}
+If ( CommitteeM2T <> "")
+SendInput, <info>%CommitteeM2T%</`r
+If (CommitteeM2Name <> "")
+SendInput, <type>per</`r<name>%CommitteeM2Name%</`r{Backspace}{Backspace}</
+Sleep, 100
+; ==3
+If (CommitteeM3Name <> "")
+SendInput, `r<contributor qualifier="cmr">`r{Space}{Space}
+If ( CommitteeM3T <> "")
+SendInput, <info>%CommitteeM3T%</`r
+If (CommitteeM3Name <> "")
+SendInput, <type>per</`r<name>%CommitteeM3Name%</`r{Backspace}{Backspace}</
+Sleep, 100
+; ==4
+If (CommitteeM4Name <> "")
+SendInput, `r<contributor qualifier="cmr">`r{Space}{Space}
+If ( CommitteeM4T <> "")
+SendInput, <info>%CommitteeM4T%</`r
+If (CommitteeM4Name <> "")
+SendInput, <type>per</`r<name>%CommitteeM4Name%</`r{Backspace}{Backspace}</
+Sleep, 100
+; ==5
+If (CommitteeM5Name <> "")
+SendInput, `r<contributor qualifier="cmr">`r{Space}{Space}
+If ( CommitteeM5T <> "")
+SendInput, <info>%CommitteeM5T%</`r
+If (CommitteeM5Name <> "")
+SendInput, <type>per</`r<name>%CommitteeM5Name%</`r{Backspace}{Backspace}</
+Sleep, 100
+; ==6
+If (CommitteeM6Name <> "")
+SendInput, `r<contributor qualifier="cmr">`r{Space}{Space}
+If ( CommitteeM6T <> "")
+SendInput, <info>%CommitteeM6T%</`r
+If (CommitteeM6Name <> "")
+SendInput, <type>per</`r<name>%CommitteeM6Name%</`r{Backspace}{Backspace}</
+Sleep, 500
+
+IfWinExist, No More Matches Found
+{
+; ======= Used incase of program typing error to loop back to re-enter text
+WinClose
+sleep, 300
+SendInput, {Esc}
+Sleep, 300
+Goto, SendCommitteeMembers
+}
+
+Sleep, 200
+IF DefinedCommittee contains Jr,-
+{
+Run, %DefinedAddress%\01_jpg\000100tp.jpg
+; ======= Used incase a "-" or "Jr." is found in committee names (it messes up moving the last name to beginning)
+; ======= Opens TP to compare metadata names to file
+NameError:
+    Gui, 50:+AlwaysOnTop
+    Gui, 50:Add, Text,   x6   y6  w400, A Jr or a "Name-Name" was found in the comittee. Please check THEN click OK.
+    Gui, 50:Add, Button, default, OK
+    Gui, 50:Show,, NameError
+Sleep, 200
+WinActivate, jEdit
+Return
+}
+50GuiClose:
+50ButtonOK:
+Gui, 50:Submit
+SetTitleMatchMode, 2
+
+IfWinExist, 000100tp
+{
+WinActivate
+SendInput !{F4}
+WinActivate, jEdit
+}
+
+; ====Keywords========
+sleep, 500
+SendInput, ^{Home}
+Sleep, 200
+SendInput, ^{Home}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}K{SHIFTUP}eywordmeta{Enter}
+Sleep, 200
+SendInput, {Esc}
+sleep, 200
+
+; ======= Sends keyword metadata with keyword variables
+If (Keyword1 <> "")
+SendInput, <subject qualifier="KWD">%Keyword1%</
+Sleep, 100
+If (Keyword2 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword2%</
+Sleep, 100
+If (Keyword3 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword3%</
+Sleep, 100
+If (Keyword4 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword4%</
+Sleep, 100
+If (Keyword5 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword5%</
+Sleep, 100
+If (Keyword6 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword6%</
+Sleep, 100
+If (Keyword7 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword7%</
+Sleep, 100
+If (Keyword8 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword8%</
+Sleep, 100
+If (Keyword9 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword9%</
+Sleep, 100
+If (Keyword10 <> "")
+SendInput, `r<subject qualifier="KWD">%Keyword10%</
+Sleep, 100
+
+; ====Abstract=====
+StringReplace, DefinedAbstract, DefinedAbstract, ", &quot;, all
+StringReplace, DefinedAbstract, DefinedAbstract, &, &amp;, all
+StringReplace, DefinedAbstract, DefinedAbstract, ', &apos;, all
+StringReplace, DefinedAbstract, DefinedAbstract, <, &lt;, all
+StringReplace, DefinedAbstract, DefinedAbstract, >, &gt;, all
+sleep, 500
+Send, {ControlDown}f{ControlUp}
+Sleep, 200
+Send, {ControlDown}f{ControlUp}
+WinWait, Search And Replace, 
+IfWinNotActive, Search And Replace, , WinActivate, Search And Replace, 
+WinWaitActive, Search And Replace, 
+Clipboard = %DefinedAbstract%
+SendInput, {SHIFTDOWN}3{SHIFTUP}{SHIFTDOWN}A{SHIFTUP}bstract{TAB}
+Sleep, 300
+SetKeyDelay, 0
+Send, ^v
+sleep, 200
+SendInput, {Alt down}a{Alt up}{Esc}
+Sleep, 200
+
+Send, {CTRLDOWN}s{CTRLUP}
+Sleep, 200
+Send, {CTRLDOWN}s{CTRLUP}
+Sleep, 200
+
+SetTitleMatchMode, 2
+WinActivate, _
+Sleep, 500
+Send, {Tab}{Tab}{Tab}
+Sleep, 200
+Send, {Backspace}
+Sleep, 500
+Send, {Down}{Enter}
+
+Gui, 10:Destroy
+Gui, 11:Destroy
+Gui, 21:Destroy
+Gui, 12:Destroy
+Gui, 22:Destroy
+Gui, 13:Destroy
+Gui, 23:Destroy
+Gui, 14:Destroy
+Gui, 24:Destroy
+Gui, 15:Destroy
+Gui, 25:Destroy
+Gui, 16:Destroy
+Gui, 26:Destroy
+Gui, 30:Destroy
+Gui, 40:Destroy
+Gui, 50:Destroy
+
+; ======= Clears all variables for next metadata xml and restarts script for sending shortcut again
+
+Reload
